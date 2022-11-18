@@ -47,13 +47,13 @@ class CountBotClient(disnake.Client):
             self.writeData()
 
         else:
-            responseContent = f':octagonal_sign: {message.author.mention} broke the count at `{self.currentCount}` \n\n'
+            responseContent = f':octagonal_sign: {message.author.mention} broke the count at: ` {self.currentCount} ` \n\n'
 
             if self.currentCount > self.highestCount:
                 self.highestCount = self.currentCount
-                responseContent += f'**:tada: New highest count of: `{self.currentCount}`**'
+                responseContent += f'**:tada: New highest count of:** ` {self.currentCount} `'
             else:
-                responseContent += f':trophy: Highest count: `{self.highestCount}`'
+                responseContent += f':trophy: Highest count: ` {self.highestCount} `'
 
             await message.channel.send(content=responseContent)
 
@@ -63,23 +63,26 @@ class CountBotClient(disnake.Client):
 
     # Reads count data from data.yml
     def readData(self):
-        with open('data.yml', 'r') as file:
-            data = yaml.safe_load(file)
+        try:
+            with open('data.yml', 'r') as file:
+                data = yaml.safe_load(file)
+        except:
+            data = None
 
-            if isinstance(data, dict):
-                if "currentCount" in data:
-                    self.currentCount = data["currentCount"]
-                else:
-                    self.currentCount = 0
+        if isinstance(data, dict):
+            if "currentCount" in data:
+                self.currentCount = data["currentCount"]
+            else:
+                self.currentCount = 0
 
-                if "highestCount" in data:
-                    self.highestCount = data["highestCount"]
-                else:
-                    self.highestCount = 0
+            if "highestCount" in data:
+                self.highestCount = data["highestCount"]
+            else:
+                self.highestCount = 0
 
     # Writes count data to data.yml
     def writeData(self):
-        with open('data.yml', 'w+') as file:
+        with open('data.yml', 'w') as file:
             yaml.dump({'currentCount': self.currentCount or 0,
                       'highestCount': self.highestCount}, file)
 
