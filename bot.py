@@ -46,6 +46,12 @@ class CountBotClient(disnake.Client):
             self.currentCount = int(message.content)
             self.writeData()
 
+            try:
+                if int(message.content) % 100 == 0:
+                    await message.add_reaction("\U0001F4AF")
+            except NameError:
+                print(f'\033[91m{NameError}\033[0m')
+
         else:
             responseContent = f':octagonal_sign: {message.author.mention} broke the count at: ` {self.currentCount} ` \n\n'
 
