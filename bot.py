@@ -79,7 +79,7 @@ class CountBotClient(disnake.Client):
 
     # Writes count data to data.yml
     def writeData(self):
-        with open('data.yml', 'w') as file:
+        with open('data.yml', 'w+') as file:
             yaml.dump({'currentCount': self.currentCount or 0,
                       'highestCount': self.highestCount}, file)
 
